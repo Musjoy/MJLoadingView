@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "MJLoadingView"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.summary          = "This is a custom loading view."
 
   s.homepage         = "https://github.com/Musjoy/MJLoadingView"
@@ -18,8 +18,9 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '7.0'
 
-  s.source_files = 'MJLoadingView/Classes/**/*'
-  
+  s.source_files = 'MJLoadingView/Classes/*.{h,m}'
+  s.resources = ["MJLoadingView/Classes/*.xib"]
+
   s.user_target_xcconfig = {
     'GCC_PREPROCESSOR_DEFINITIONS' => 'MODULE_LOADING_VIEW'
   }
