@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'MJLoadingView_Example', :exclusive => true do
+  pod 'MJLoadingView', :path => '../'
+end
+
+target 'MJLoadingView_Tests', :exclusive => true do
+  pod 'MJLoadingView', :path => '../'
+
+  
+end
