@@ -1,0 +1,17 @@
+PODS:
+  - MJLoadingView (0.1.0):
+    - ModuleCapability (~> 0.1.1)
+  - ModuleCapability (0.1.1)
+
+DEPENDENCIES:
+  - MJLoadingView (from `../`)
+
+EXTERNAL SOURCES:
+  MJLoadingView:
+    :path: ../
+
+SPEC CHECKSUMS:
+  MJLoadingView: e467d0dba3546e24566e3aa1ab91bad6ed9e278d
+  ModuleCapability: c58431991173e091993386b1840082a2540f2de1
+
+COCOAPODS: 0.39.0
