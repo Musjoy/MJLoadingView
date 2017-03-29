@@ -55,6 +55,7 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     if (self.tag < 0 || self.tag >= ALLOW_MAX_LOADING_TYPE) {
         _loadingType = 0;
     } else {
