@@ -290,6 +290,10 @@
 - (void)hideLoading
 {
     if (!_isInShow) {
+        self.hidden = YES;
+        if (_completionBlock) {
+            _completionBlock();
+        }
         return;
     }
     _isInShow = NO;
