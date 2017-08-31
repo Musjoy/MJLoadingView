@@ -22,13 +22,18 @@
 
 @interface MJLoadingView ()
 
-@property (nonatomic, strong) NSMutableArray *arrLoadings;          /**< 当前loading列表 */
+@property (nonatomic, strong) IBInspectable NSString *imageName;    ///< 需要动画的文件名前缀，默认是LOADING_IMAGE_NAME_PREFIX
+@property (nonatomic, assign) IBInspectable int duration;           ///< 需要动画时间，默认是2秒
 
-@property (nonatomic, assign) NSInteger curShowIndex;               /**< 当前展示的loading对应的index */
+@property (nonatomic, strong) NSMutableArray *arrLoadings;          ///< 当前loading列表
 
-@property (nonatomic, assign) BOOL isLoadingLabelHide;              /**< loading中的label是否隐藏 */
+@property (nonatomic, assign) NSInteger curShowIndex;               ///< 当前展示的loading对应的index
 
-@property (nonatomic, assign) BOOL isShowing;                       /**< 正在进行显示动画，从无到有，对显示动画进行判断 */
+@property (nonatomic, assign) BOOL isLoadingLabelHide;              ///< loading中的label是否隐藏
+
+@property (nonatomic, assign) BOOL isShowing;                       ///< 正在进行显示动画，从无到有，对显示动画进行判断
+
+
 
 @end
 
@@ -56,11 +61,7 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    if (self.tag < 0 || self.tag >= ALLOW_MAX_LOADING_TYPE) {
-        _loadingType = 0;
-    } else {
-        _loadingType = (int)self.tag;
-    }
+
     [self settingView];
 }
 
@@ -72,14 +73,22 @@
     UIView *contentView = [[[NSBundle mainBundle] loadNibNamed:nibName
                                                          owner:self
                                                        options:nil] objectAtIndex:0];
-    if (_loadingType == 0) {
-        _viewActivity = (UIImageView *)_activityView;
-    } else {
-        _viewActivity = _imgviewLoading;
-        // 处理loading图片
-        NSString *imgNamePrefix = [LOADING_IMAGE_NAME_PREFIX stringByAppendingFormat:@"%d_", _loadingType];
-        _imgviewLoading.image = [UIImage animatedImageNamed:imgNamePrefix duration:2];
+    if (contentView == nil) {
+        LogError(@"MJLoadingView%d.xib is not exit or empty", _loadingType);
+        return;
     }
+    
+    if (_imageName == nil) {
+        _imageName = LOADING_IMAGE_NAME_PREFIX;
+    }
+    if (_duration == 0) {
+        _duration = LOADING_IMAGE_DURATION;
+    }
+    // 处理loading图片
+    if (_imgviewLoading) {
+        _imgviewLoading.image = [UIImage animatedImageNamed:_imageName duration:_duration];
+    }
+    
     [contentView setFrame:self.bounds];
     [contentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [self addSubview:contentView];
@@ -93,6 +102,15 @@
 
 
 #pragma mark - Set & Get
+
+- (void)setAnimatImageName:(NSString *)animatImageName duration:(NSTimeInterval)animatDuration
+{
+    _imageName = animatImageName;
+    _duration = animatDuration;
+    if (_imgviewLoading) {
+        _imgviewLoading.image = [UIImage animatedImageNamed:_imageName duration:_duration];
+    }
+}
 
 - (void)setLoadingText:(NSString *)loadingText
 {
@@ -141,7 +159,7 @@
         return;
     }
     
-    NSMutableDictionary *aDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *aDic = _arrLoadings[aIndex];
     if (requestId.length > 0) {
         [aDic setObject:requestId forKey:@"requestId"];
     }
@@ -267,6 +285,26 @@
 
 #pragma mark - View Animate
 
+- (void)startAnimating
+{
+    if (_activityView) {
+        [_activityView startAnimating];
+    }
+    if (_imgviewLoading) {
+        [_imgviewLoading startAnimating];
+    }
+}
+
+- (void)stopAnimating
+{
+    if (_activityView) {
+        [_activityView stopAnimating];
+    }
+    if (_imgviewLoading) {
+        [_imgviewLoading stopAnimating];
+    }
+}
+
 /** 显示loading */
 - (void)showLoading
 {
@@ -275,7 +313,7 @@
     }
     _isInShow = YES;
 
-    [_viewActivity startAnimating];
+    [self startAnimating];
     self.hidden = NO;
     _isShowing = YES;
     [UIView animateWithDuration:DEFALUT_ANIMATE_DURATION animations:^{
@@ -297,7 +335,7 @@
         return;
     }
     _isInShow = NO;
-    [_viewActivity stopAnimating];
+    [self stopAnimating];
     if (!_isShowing) {
         // 没有在显示动画中
         [UIView animateWithDuration:DEFALUT_ANIMATE_DURATION animations:^{
