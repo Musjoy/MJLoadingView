@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "MJLoadingView"
-  s.version          = "0.1.1"
+  s.version          = "0.1.2"
   s.summary          = "This is a custom loading view."
 
   s.homepage         = "https://github.com/Musjoy/MJLoadingView"
