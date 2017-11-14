@@ -15,7 +15,7 @@
 #define LOADING_IMAGE_DURATION 2
 #endif
 
-typedef void (^LoadingCompletionBlock)();
+typedef void (^LoadingCompletionBlock)(void);
 
 
 @interface MJLoadingView : UIView
