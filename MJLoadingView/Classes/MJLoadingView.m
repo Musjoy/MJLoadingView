@@ -7,12 +7,12 @@
 //
 
 #import "MJLoadingView.h"
-#ifdef MODULE_WEB_INTERFACE
-#import "WebInterface.h"
+#ifdef  MODULE_WEB_INTERFACE
+#import <WebInterface/WebInterface.h>
 #endif
-#ifdef MODULE_CONTROLLER_MANAGER
-#import "MJControllerManager.h"
-#import "MJNavigationController.h"
+#ifdef  MODULE_CONTROLLER_MANAGER
+#import HEADER_CONTROLLER_MANAGER
+#import HEADER_NAVIGATION_CONTROLLER
 #endif
 
 
